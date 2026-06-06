@@ -145,215 +145,15 @@
 <script>
 // CONFIGURACIÓN DE GOOGLE SHEETS
 const SHEET_ID = "1NzYu2WBVc0JiYDmA_SYF-s1_jHmw63lR51zNXDWu29A";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+const CONFIG_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Configuracion`;
+const PRODUCTOS_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Productos`;
 
 let TC = parseFloat(localStorage.getItem("tc") || "1200");
 
-const data = [
-  // ACCESORIOS APPLE
-  { cat:"Accesorios Apple", code:"ACC-001", name:"AirTag (x4)", price:95 },
-  { cat:"Accesorios Apple", code:"ACC-002", name:'Magic Keyboard Folio 11" White (A16)', price:280 },
-  { cat:"Accesorios Apple", code:"ACC-003", name:"Pencil Pro", price:135 },
-  { cat:"Accesorios Apple", code:"ACC-004", name:"Pencil USB-C", price:100 },
-  { cat:"Accesorios Apple", code:"ACC-005", name:"MagSafe Charger 15W", price:39 },
-  { cat:"Accesorios Apple", code:"ACC-006", name:"Cable USB-C a Lightning 1m", price:19 },
-  { cat:"Accesorios Apple", code:"ACC-007", name:"Charger Adapter USB-C 20W (Alt.)", price:10 },
-  // AIRPODS
-  { cat:"AirPods", code:"APD-001", name:"AirPods 4", price:130 },
-  { cat:"AirPods", code:"APD-002", name:"AirPods Pro 3", price:240 },
-  { cat:"AirPods", code:"APD-003", name:"AirPods Max USB-C Midnight", price:549 },
-  // IPAD
-  { cat:"iPad", code:"IPD-001", name:'iPad 11" Air M3 128GB Space Gray', price:535 },
-  { cat:"iPad", code:"IPD-002", name:'iPad 11" Air M4 128GB Blue', price:625 },
-  { cat:"iPad", code:"IPD-003", name:'iPad 11" Air M4 128GB Space Gray', price:625 },
-  { cat:"iPad", code:"IPD-004", name:'iPad 11" Air M4 256GB Blue', price:725 },
-  { cat:"iPad", code:"IPD-005", name:'iPad 11" Air M4 256GB Purple', price:725 },
-  { cat:"iPad", code:"IPD-006", name:'iPad 11" Air M4 256GB Space Gray', price:725 },
-  { cat:"iPad", code:"IPD-007", name:'iPad 11" Pro M5 256GB Silver', price:1020 },
-  { cat:"iPad", code:"IPD-008", name:'iPad 11" Pro M5 256GB Space Black', price:1020 },
-  { cat:"iPad", code:"IPD-009", name:'iPad 13" Pro M5 256GB Silver', price:1220 },
-  // IPHONE
-  { cat:"iPhone", code:"IPH-001", name:"iPhone 16 128GB Black", price:799 },
-  { cat:"iPhone", code:"IPH-002", name:"iPhone 16 128GB White", price:799 },
-  { cat:"iPhone", code:"IPH-003", name:"iPhone 16 Plus 128GB Black", price:899 },
-  { cat:"iPhone", code:"IPH-004", name:"iPhone 16 Pro 128GB Black Titanium", price:999 },
-  { cat:"iPhone", code:"IPH-005", name:"iPhone 16 Pro Max 256GB Desert Titanium", price:1199 },
-  // MAC
-  { cat:"Mac", code:"MAC-001", name:'MacBook Air 13" M4 8GB 256GB Midnight', price:1099 },
-  { cat:"Mac", code:"MAC-002", name:'MacBook Air 13" M4 16GB 512GB Silver', price:1299 },
-  { cat:"Mac", code:"MAC-003", name:'MacBook Pro 14" M4 Pro 24GB 512GB', price:1999 },
-  { cat:"Mac", code:"MAC-004", name:"Mac Mini M4 16GB 256GB", price:599 },
-  // APPLE WATCH
-  { cat:"Apple Watch", code:"WAT-001", name:"Apple Watch SE 2 40mm Midnight", price:249 },
-  { cat:"Apple Watch", code:"WAT-002", name:"Apple Watch Series 10 42mm Silver", price:399 },
-  { cat:"Apple Watch", code:"WAT-003", name:"Apple Watch Ultra 2 49mm Black", price:799 },
-  // SAMSUNG
-  { cat:"Samsung", code:"SAM-001", name:"Cargador Samsung Original 25W x1", price:25 },
-  { cat:"Samsung", code:"SAM-002", name:"Cargador Samsung Original 25W x3", price:20 },
-  { cat:"Samsung", code:"SAM-003", name:"Cargador Samsung Original 45W x1", price:30 },
-  { cat:"Samsung", code:"SAM-004", name:"Cargador Samsung Original 45W x3", price:25 },
-  { cat:"Samsung", code:"SAM-005", name:"Samsung A06 4/64 GB", price:120 },
-  { cat:"Samsung", code:"SAM-006", name:"Samsung A06 4/128 GB 🔥", price:128 },
-  { cat:"Samsung", code:"SAM-007", name:"Samsung A16 4/128 GB (S/Carg)", price:162 },
-  { cat:"Samsung", code:"SAM-008", name:"Samsung A16 4/128 GB 🔥", price:155 },
-  { cat:"Samsung", code:"SAM-009", name:"Samsung A07 4/64 GB 🔥", price:113 },
-  { cat:"Samsung", code:"SAM-010", name:"Samsung A07 4/128 GB (S/Carg)", price:145 },
-  { cat:"Samsung", code:"SAM-011", name:"Samsung A07 4/128 GB", price:145 },
-  { cat:"Samsung", code:"SAM-012", name:"Samsung A17 4/128 GB 🔥", price:182 },
-  { cat:"Samsung", code:"SAM-013", name:"Samsung A17 6/128 GB 🔥", price:193 },
-  { cat:"Samsung", code:"SAM-014", name:"Samsung A17 8/256 GB 🔥", price:245 },
-  { cat:"Samsung", code:"SAM-015", name:"Samsung A17 5G 6/128 GB 🔥", price:227 },
-  { cat:"Samsung", code:"SAM-016", name:"Samsung A26 5G 6/128 GB", price:270 },
-  { cat:"Samsung", code:"SAM-017", name:"Samsung A26 5G 8/256 GB 🔥", price:281 },
-  { cat:"Samsung", code:"SAM-018", name:"Samsung A36 5G 6/128 GB", price:285 },
-  { cat:"Samsung", code:"SAM-019", name:"Samsung A36 5G 8/256 GB 🔥", price:325 },
-  { cat:"Samsung", code:"SAM-020", name:"Samsung A37 6/128 GB", price:330 },
-  { cat:"Samsung", code:"SAM-021", name:"Samsung A37 8/128 GB", price:335 },
-  { cat:"Samsung", code:"SAM-022", name:"Samsung A37 8/256 GB", price:400 },
-  { cat:"Samsung", code:"SAM-023", name:"Samsung A56 5G 8/256 GB", price:400 },
-  { cat:"Samsung", code:"SAM-024", name:"Samsung A56 5G 12/256 GB 🔥", price:438 },
-  { cat:"Samsung", code:"SAM-025", name:"Samsung A57 5G 8/128 GB", price:400 },
-  { cat:"Samsung", code:"SAM-026", name:"Samsung A57 5G 8/256 GB 🔥", price:440 },
-  { cat:"Samsung", code:"SAM-027", name:"Samsung A57 5G 12/256 GB", price:525 },
-  { cat:"Samsung", code:"SAM-028", name:"Samsung A57 5G 12/512 GB", price:635 },
-  { cat:"Samsung", code:"SAM-029", name:"Samsung S24 FE 8/512 GB", price:540 },
-  { cat:"Samsung", code:"SAM-030", name:"Samsung S25 FE 8/128 GB", price:515 },
-  { cat:"Samsung", code:"SAM-031", name:"Samsung S25 FE 8/256 GB", price:560 },
-  { cat:"Samsung", code:"SAM-032", name:"Samsung S25 FE 8/512 GB 🔥", price:595 },
-  { cat:"Samsung", code:"SAM-033", name:"Samsung S25 FE 12/512 GB", price:615 },
-  { cat:"Samsung", code:"Samsung S25 12/256 GB", price:680 },
-  { cat:"Samsung", code:"SAM-035", name:"Samsung S25 Plus 12/256 GB", price:855 },
-  { cat:"Samsung", code:"SAM-036", name:"Samsung S25 Ultra 12/256 GB", price:950 },
-  { cat:"Samsung", code:"SAM-037", name:"Samsung S25 Ultra 12/512 GB", price:1005 },
-  { cat:"Samsung", code:"SAM-038", name:"Samsung S25 Ultra 12/1TB", price:1070 },
-  { cat:"Samsung", code:"SAM-039", name:"Samsung S26 12/256 GB", price:770 },
-  { cat:"Samsung", code:"SAM-040", name:"Samsung S26 12/512 GB", price:895 },
-  { cat:"Samsung", code:"SAM-041", name:"Samsung S26 Plus 256 GB", price:990 },
-  { cat:"Samsung", code:"SAM-042", name:"Samsung S26 Plus 512 GB", price:1130 },
-  { cat:"Samsung", code:"SAM-043", name:"Samsung S26 Ultra 12/256 GB", price:1070 },
-  { cat:"Samsung", code:"SAM-044", name:"Samsung S26 Ultra 12/512 GB", price:1205 },
-  { cat:"Samsung", code:"SAM-045", name:"Samsung S26 Ultra 16/1TB", price:1500 },
-  // XIAOMI 4G
-  { cat:"Xiaomi 4G", code:"XIA-001", name:"Xiaomi Redmi A5 4/128 GB", price:135 },
-  { cat:"Xiaomi 4G", code:"XIA-002", name:"Xiaomi Redmi A7 Pro 4/64 GB", price:125 },
-  { cat:"Xiaomi 4G", code:"XIA-003", name:"Xiaomi Redmi A7 Pro 4/128 GB", price:145 },
-  { cat:"Xiaomi 4G", code:"XIA-004", name:"Xiaomi Redmi 15 6/128 GB", price:190 },
-  { cat:"Xiaomi 4G", code:"XIA-005", name:"Xiaomi Redmi 15 8/256 GB", price:210 },
-  { cat:"Xiaomi 4G", code:"XIA-006", name:"Xiaomi Redmi 15C 4/128 GB", price:160 },
-  { cat:"Xiaomi 4G", code:"XIA-007", name:"Xiaomi Redmi 15C 4/256 GB", price:170 },
-  { cat:"Xiaomi 4G", code:"XIA-008", name:"Xiaomi Redmi 15C 8/256 GB 🔥", price:185 },
-  { cat:"Xiaomi 4G", code:"XIA-009", name:"Xiaomi Note 14 8/256 GB", price:210 },
-  { cat:"Xiaomi 4G", code:"XIA-010", name:"Xiaomi Note 14S 8/256 GB", price:240 },
-  { cat:"Xiaomi 4G", code:"XIA-011", name:"Xiaomi Note 14S 12/512 GB 🔥", price:290 },
-  { cat:"Xiaomi 4G", code:"XIA-012", name:"Xiaomi Note 15 6/128 GB", price:198 },
-  { cat:"Xiaomi 4G", code:"XIA-013", name:"Xiaomi Note 15 8/256 GB 🔥", price:220 },
-  { cat:"Xiaomi 4G", code:"XIA-014", name:"Xiaomi Note 15 8/512 GB", price:265 },
-  { cat:"Xiaomi 4G", code:"XIA-015", name:"Xiaomi Note 15 Pro 8/256 GB 🔥", price:275 },
-  { cat:"Xiaomi 4G", code:"XIA-016", name:"Xiaomi Note 15 Pro 12/512 GB 🔥", price:350 },
-  { cat:"Xiaomi 4G", code:"XIA-017", name:"Xiaomi Poco C71 4/128 GB", price:130 },
-  { cat:"Xiaomi 4G", code:"XIA-018", name:"Xiaomi Poco C85 6/128 GB", price:165 },
-  { cat:"Xiaomi 4G", code:"XIA-019", name:"Xiaomi Poco C85 8/256 GB", price:190 },
-  { cat:"Xiaomi 4G", code:"XIA-020", name:"Xiaomi Poco M7 6/128 GB", price:170 },
-  { cat:"Xiaomi 4G", code:"XIA-021", name:"Xiaomi Poco M7 8/256 GB", price:190 },
-  // XIAOMI 5G
-  { cat:"Xiaomi 5G", code:"XIA-022", name:"Xiaomi Note 14 5G 6/128 GB", price:215 },
-  { cat:"Xiaomi 5G", code:"XIA-023", name:"Xiaomi Note 14 5G 8/256 GB", price:245 },
-  { cat:"Xiaomi 5G", code:"XIA-024", name:"Xiaomi Note 14 Pro+ 8/256 GB 🔥", price:320 },
-  { cat:"Xiaomi 5G", code:"XIA-025", name:"Xiaomi Note 14 Pro+ 12/256 GB", price:315 },
-  { cat:"Xiaomi 5G", code:"XIA-026", name:"Xiaomi Note 14 Pro+ 12/512 GB", price:423 },
-  { cat:"Xiaomi 5G", code:"XIA-027", name:"Xiaomi Note 15 5G 8/256 GB 🔥", price:255 },
-  { cat:"Xiaomi 5G", code:"XIA-028", name:"Xiaomi Note 15 Pro 5G 8/256 GB 🔥", price:345 },
-  { cat:"Xiaomi 5G", code:"XIA-029", name:"Xiaomi Note 15 Pro 5G 8/512 GB 🔥", price:350 },
-  { cat:"Xiaomi 5G", code:"XIA-030", name:"Xiaomi Note 15 Pro 5G 12/512 GB", price:410 },
-  { cat:"Xiaomi 5G", code:"XIA-031", name:"Xiaomi Note 15 Pro+ 8/256 GB 🔥", price:380 },
-  { cat:"Xiaomi 5G", code:"XIA-032", name:"Xiaomi Note 15 Pro+ 12/512 GB 🔥", price:470 },
-  { cat:"Xiaomi 5G", code:"XIA-033", name:"Xiaomi Poco M7 Pro 5G 8/256 GB", price:275 },
-  { cat:"Xiaomi 5G", code:"XIA-034", name:"Xiaomi Poco M8 5G 8/256 GB", price:255 },
-  { cat:"Xiaomi 5G", code:"XIA-035", name:"Xiaomi Poco M8 5G 8/512 GB", price:275 },
-  { cat:"Xiaomi 5G", code:"XIA-036", name:"Xiaomi Poco M8 Pro 5G 8/256 GB", price:315 },
-  { cat:"Xiaomi 5G", code:"XIA-037", name:"Xiaomi Poco M8 Pro 5G 12/512 GB", price:360 },
-  { cat:"Xiaomi 5G", code:"XIA-038", name:"Xiaomi Poco X7 5G 12/512 GB (S/Carg)", price:340 },
-  { cat:"Xiaomi 5G", code:"XIA-039", name:"Xiaomi Poco X7 Pro 5G 8/256 GB", price:350 },
-  { cat:"Xiaomi 5G", code:"XIA-040", name:"Xiaomi Poco X7 Pro 5G 12/512 GB 🔥", price:395 },
-  { cat:"Xiaomi 5G", code:"XIA-041", name:"Xiaomi Poco X8 Pro 5G 8/256 GB", price:335 },
-  { cat:"Xiaomi 5G", code:"XIA-042", name:"Xiaomi Poco X8 Pro 5G 8/512 GB 🔥", price:385 },
-  { cat:"Xiaomi 5G", code:"XIA-043", name:"Xiaomi Poco X8 Pro 5G 12/512 GB", price:460 },
-  { cat:"Xiaomi 5G", code:"XIA-044", name:"Xiaomi Poco X8 Pro Max 5G 12/256 GB 🔥", price:490 },
-  { cat:"Xiaomi 5G", code:"XIA-045", name:"Xiaomi Poco X8 Pro Max 5G 12/512 GB", price:590 },
-  { cat:"Xiaomi 5G", code:"XIA-046", name:"Xiaomi Poco F7 5G 12/512 GB", price:510 },
-  { cat:"Xiaomi 5G", code:"XIA-047", name:"Xiaomi Poco F8 Pro 5G 12/256 GB", price:600 },
-  { cat:"Xiaomi 5G", code:"XIA-048", name:"Xiaomi Poco F8 Pro 5G 12/512 GB", price:665 },
-  { cat:"Xiaomi 5G", code:"XIA-049", name:"Xiaomi Poco F8 Ultra 5G 12/256 GB", price:735 },
-  { cat:"Xiaomi 5G", code:"XIA-050", name:"Xiaomi Poco F8 Ultra 5G 16/512 GB", price:895 },
-  { cat:"Xiaomi 5G", code:"XIA-051", name:"Xiaomi 15 5G 12/512 GB", price:835 },
-  { cat:"Xiaomi 5G", code:"XIA-052", name:"Xiaomi 15T 5G 12/512 GB", price:715 },
-  { cat:"Xiaomi 5G", code:"XIA-053", name:"Xiaomi 15T Pro 5G 12/256 GB", price:720 },
-  { cat:"Xiaomi 5G", code:"XIA-054", name:"Xiaomi 15T Pro 5G 12/512 GB", price:845 },
-  { cat:"Xiaomi 5G", code:"XIA-055", name:"Xiaomi 17 5G 12/512 GB", price:925 },
-  // MOTOROLA
-  { cat:"Motorola", code:"MOT-001", name:"Motorola E15 2/64 GB (S/Carg)", price:115 },
-  { cat:"Motorola", code:"MOT-002", name:"Motorola E15 2/64 GB", price:125 },
-  { cat:"Motorola", code:"MOT-003", name:"Motorola G04S 4/256 GB 🔥", price:160 },
-  { cat:"Motorola", code:"MOT-004", name:"Motorola G05 4/64 GB", price:135 },
-  { cat:"Motorola", code:"MOT-005", name:"Motorola G05 4/128 GB (S/Carg)", price:145 },
-  { cat:"Motorola", code:"MOT-006", name:"Motorola G05 4/128 GB", price:150 },
-  { cat:"Motorola", code:"MOT-007", name:"Motorola G05 4/256 GB (S/Carg)", price:150 },
-  { cat:"Motorola", code:"MOT-008", name:"Motorola G06 4/64 GB (S/Carg)", price:125 },
-  { cat:"Motorola", code:"MOT-009", name:"Motorola G06 4/64 GB", price:135 },
-  { cat:"Motorola", code:"MOT-010", name:"Motorola G06 4/128 GB 🔥", price:129 },
-  { cat:"Motorola", code:"MOT-011", name:"Motorola G06 4/256 GB", price:146 },
-  { cat:"Motorola", code:"MOT-012", name:"Motorola G06 8/256 GB (S/Carg)", price:185 },
-  { cat:"Motorola", code:"MOT-013", name:"Motorola G06 Power 4/64 GB (S/Carg)", price:140 },
-  { cat:"Motorola", code:"MOT-014", name:"Motorola G06 Power 4/256 GB", price:160 },
-  { cat:"Motorola", code:"MOT-015", name:"Motorola G15 4/128 GB (S/Carg)", price:160 },
-  { cat:"Motorola", code:"MOT-016", name:"Motorola G15 4/128 GB", price:175 },
-  { cat:"Motorola", code:"MOT-017", name:"Motorola G15 4/256 GB 🔥", price:175 },
-  { cat:"Motorola", code:"MOT-018", name:"Motorola G15 4/512 GB", price:187 },
-  { cat:"Motorola", code:"MOT-019", name:"Motorola G15 8/128 GB (S/Carg)", price:170 },
-  { cat:"Motorola", code:"MOT-020", name:"Motorola G15 Power 8/256 GB (S/Carg)", price:170 },
-  { cat:"Motorola", code:"MOT-021", name:"Motorola G17 4/256 GB", price:210 },
-  { cat:"Motorola", code:"MOT-022", name:"Motorola G17 Power 8/256 GB", price:230 },
-  { cat:"Motorola", code:"MOT-023", name:"Motorola G35 5G 4/128 GB (S/Carg)", price:175 },
-  { cat:"Motorola", code:"MOT-024", name:"Motorola G35 5G 8/128 GB (S/Carg)", price:180 },
-  { cat:"Motorola", code:"MOT-025", name:"Motorola G35 5G 4/256 GB 🔥", price:200 },
-  { cat:"Motorola", code:"MOT-026", name:"Motorola G35 5G 8/256 GB (S/Carg)", price:200 },
-  { cat:"Motorola", code:"MOT-027", name:"Motorola G56 5G 8/512 GB (S/Carg)", price:248 },
-  { cat:"Motorola", code:"MOT-028", name:"Motorola G56 5G 12/256 GB", price:250 },
-  { cat:"Motorola", code:"MOT-029", name:"Motorola G57 Power 5G 12/256 GB (S/Carg)", price:280 },
-  { cat:"Motorola", code:"MOT-030", name:"Motorola G67 4/256 GB", price:335 },
-  { cat:"Motorola", code:"MOT-031", name:"Motorola G67 Power 5G 8/128 GB", price:230 },
-  { cat:"Motorola", code:"MOT-032", name:"Motorola G77 8/256 GB", price:305 },
-  { cat:"Motorola", code:"MOT-033", name:"Motorola G86 5G 8/256 GB (S/Carg)", price:260 },
-  { cat:"Motorola", code:"MOT-034", name:"Motorola G86 5G 8/512 GB", price:290 },
-  { cat:"Motorola", code:"MOT-035", name:"Motorola G86 Power 5G 8/512 GB", price:280 },
-  { cat:"Motorola", code:"MOT-036", name:"Motorola G96 5G 8/128 GB", price:265 },
-  { cat:"Motorola", code:"MOT-037", name:"Motorola Edge 40 Pro 12/256 GB", price:395 },
-  { cat:"Motorola", code:"MOT-038", name:"Motorola Edge 50 Fusion 5G 8/256 GB (S/Carg)", price:250 },
-  { cat:"Motorola", code:"MOT-039", name:"Motorola Edge 50 5G 12/512 GB (S/Carg)", price:335 },
-  { cat:"Motorola", code:"MOT-040", name:"Motorola Edge 50 5G 12/512 GB", price:340 },
-  { cat:"Motorola", code:"MOT-041", name:"Motorola Edge 60 Fusion 5G 8/256 GB 🔥", price:305 },
-  { cat:"Motorola", code:"MOT-042", name:"Motorola Edge 60 Fusion 5G 12/256 GB (S/Carg)", price:310 },
-  { cat:"Motorola", code:"MOT-043", name:"Motorola Edge 60 Fusion 5G 12/256 GB", price:315 },
-  { cat:"Motorola", code:"MOT-044", name:"Motorola Edge 60 Neo 5G 8/256 GB (S/Carg)", price:350 },
-  { cat:"Motorola", code:"MOT-045", name:"Motorola Edge 60 Pro 5G 8/256 GB (S/Carg)", price:440 },
-  { cat:"Motorola", code:"MOT-046", name:"Motorola Edge 60 Pro 5G 12/512 GB", price:490 },
-  { cat:"Motorola", code:"MOT-047", name:"Motorola Edge 60 Pro 5G 16/512 GB", price:515 },
-  { cat:"Motorola", code:"MOT-048", name:"Motorola Edge 70 5G 8/256 GB", price:475 },
-  { cat:"Motorola", code:"MOT-049", name:"Motorola Edge 70 Fusion 5G 8/256 GB", price:460 },
-  { cat:"Motorola", code:"MOT-050", name:"Motorola Razr 50 5G 12/512 GB", price:630 },
-  // NOTEBOOKS
-  { cat:"Notebooks", code:"NTB-001", name:'Lenovo IdeaPad 3 15" i5 8GB 512GB SSD', price:699 },
-  { cat:"Notebooks", code:"NTB-002", name:'Lenovo IdeaPad Slim 5 16" i7 16GB 1TB', price:999 },
-  { cat:"Notebooks", code:"NTB-003", name:'HP Pavilion 15" i5 16GB 512GB SSD', price:749 },
-  { cat:"Notebooks", code:"NTB-004", name:'HP Laptop 14" i3 8GB 256GB SSD', price:499 },
-  { cat:"Notebooks", code:"NTB-005", name:'Asus VivoBook 15" Ryzen 5 16GB 512GB', price:679 },
-  { cat:"Notebooks", code:"NTB-006", name:"Asus ROG Zephyrus G14 RTX 4060", price:1499 },
-  { cat:"Notebooks", code:"NTB-007", name:'Dell Inspiron 15" i5 16GB 512GB SSD', price:799 },
-  { cat:"Notebooks", code:"NTB-008", name:'Acer Aspire 5 15" i5 8GB 512GB SSD', price:599 },
-];
+let data = [];
 
 const catOrder = ["Accesorios Apple","AirPods","iPad","iPhone","Mac","Apple Watch","Samsung","Xiaomi 4G","Xiaomi 5G","Motorola","Notebooks"];
-const categories = ["Todas", ...catOrder];
+let categories = ["Todas"];
 let activeFilter = "Todas";
 
 const now = new Date();
@@ -366,6 +166,8 @@ function updateTCDisplay() {
 }
 
 const chipsEl = document.getElementById("chips");
+function renderChips(){
+chipsEl.innerHTML="";
 categories.forEach(cat => {
   const btn = document.createElement("button");
   btn.className = "chip" + (cat === "Todas" ? " active" : "");
@@ -378,6 +180,7 @@ categories.forEach(cat => {
   };
   chipsEl.appendChild(btn);
 });
+}
 
 function fmtARS(usd) {
   return "$" + Math.round(usd * TC).toLocaleString("es-AR");
@@ -425,10 +228,27 @@ function applyFilters() {
   });
 }
 
+
+async function fetchProductos() {
+  try {
+    const response = await fetch(PRODUCTOS_URL);
+    const csv = await response.text();
+    const lines = csv.split("\n");
+    data = [];
+    for(let i=1;i<lines.length;i++){
+      const cols = lines[i].split(",").map(c=>c.replace(/"/g,"").trim());
+      if(cols.length<3) continue;
+      const precio=parseFloat(cols[2]);
+      if(!cols[0]||!cols[1]||isNaN(precio)) continue;
+      data.push({cat:cols[0],code:"",name:cols[1],price:precio});
+    }
+  } catch(e){ console.error(e); }
+}
+
 // FUNCIÓN PARA SOLICITAR EL VALOR DEL DÓLAR A GOOGLE SHEETS
 async function fetchDolarFromSheet() {
   try {
-    const response = await fetch(SHEET_URL);
+    const response = await fetch(CONFIG_URL);
     if (!response.ok) throw new Error("Error en la conexión con la planilla");
     const text = await response.text();
     
@@ -459,7 +279,14 @@ async function fetchDolarFromSheet() {
 }
 
 // Inicialización de la página
-fetchDolarFromSheet();
+(async()=>{
+ await fetchProductos();
+ catOrder.length=0;
+ [...new Set(data.map(x=>x.cat))].forEach(c=>catOrder.push(c));
+ categories=["Todas",...catOrder];
+ renderChips();
+ await fetchDolarFromSheet();
+})();
 </script>
 </body>
 </html>
