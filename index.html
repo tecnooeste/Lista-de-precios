@@ -34,12 +34,6 @@
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .tc-display { font-family: var(--mono); font-size: 11px; color: #aaa; background: #2d3035; padding: 5px 12px; border-radius: 4px; }
     .tc-display strong { color: #5b9eff; }
-    .edit-btn {
-      font-family: var(--mono); font-size: 11px; background: transparent;
-      color: #666; border: 1px solid #3a3f45; padding: 5px 10px;
-      border-radius: 4px; cursor: pointer; transition: all 0.12s;
-    }
-    .edit-btn:hover { color: #fff; border-color: #666; }
 
     .page-header { background: var(--header-bg); padding: 2.5rem 2rem 2rem; border-bottom: 3px solid #3a3f45; }
     .page-header h1 { font-family: var(--sans); font-weight: 300; font-size: 2rem; color: #fff; letter-spacing: -0.03em; margin-bottom: 6px; }
@@ -84,12 +78,10 @@
     .group-b td { background: #fdf9ec; }
     .group-a:hover td, .group-b:hover td { background: var(--row-hover) !important; }
 
-    .code-cell { font-family: var(--mono); font-size: 12px; color: var(--muted); }
     .product-cell { font-size: 13.5px; color: var(--text); }
     .price-usd { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; text-align: right; }
     .price-ars { font-family: var(--mono); font-size: 13px; font-weight: 500; color: #1a6fff; white-space: nowrap; text-align: right; }
 
-    col.col-code { width: 95px; }
     col.col-usd  { width: 100px; }
     col.col-ars  { width: 130px; }
 
@@ -98,45 +90,19 @@
     .page-footer { max-width: 1200px; margin: 0 auto 2rem; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
     .footer-count { font-family: var(--mono); font-size: 12px; color: var(--muted); }
 
-    .toast {
-      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: #1e2124; color: #fff; font-family: var(--mono); font-size: 12px;
-      padding: 10px 20px; border-radius: 6px; z-index: 999;
-      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); white-space: nowrap;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-
-    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: center; justify-content: center; }
-    .modal-bg.open { display: flex; }
-    .modal { background: #fff; border-radius: 10px; padding: 2rem; width: min(380px, 92vw); }
-    .modal h2 { font-family: var(--mono); font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-    .modal p { font-size: 12px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.5; }
-    .modal label { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 4px; }
-    .modal input { width: 100%; font-family: var(--mono); font-size: 14px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 4px; outline: none; margin-bottom: 1rem; color: var(--text); }
-    .modal input:focus { border-color: var(--accent); }
-    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 0.5rem; }
-    .btn-cancel { font-family: var(--mono); font-size: 12px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 4px; background: transparent; color: var(--muted); cursor: pointer; }
-    .btn-save { font-family: var(--mono); font-size: 12px; padding: 8px 16px; border: none; border-radius: 4px; background: var(--header-bg); color: #fff; cursor: pointer; }
-    .btn-save:hover { background: #2d3035; }
-    .modal-error { font-family: var(--mono); font-size: 11px; color: #c0392b; margin-top: -8px; margin-bottom: 8px; display: none; }
-
     @media (max-width: 700px) {
       nav { padding: 0 1rem; }
       .page-header { padding: 1.5rem 1rem 1.25rem; }
       .controls, .table-wrap, .page-footer { padding-left: 1rem; padding-right: 1rem; }
-      .nav-meta { display: none; }
     }
   </style>
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
-
 <nav>
   <a href="#" class="logo">Tecno<span>.</span>Oeste</a>
   <div class="nav-right">
-    <div class="tc-display">USD → ARS: <strong id="tc-nav">$—</strong></div>
-    <button class="edit-btn" onclick="openModal()">✎ Tipo de cambio</button>
+    <div class="tc-display">USD → ARS: <strong id="tc-nav">$Cargando...</strong></div>
   </div>
 </nav>
 
@@ -176,25 +142,11 @@
   <span class="footer-count">Tecno.Oeste &copy; 2025</span>
 </div>
 
-<!-- MODAL -->
-<div class="modal-bg" id="modalBg">
-  <div class="modal">
-    <h2>Editar tipo de cambio</h2>
-    <p>Solo el propietario puede modificar este valor. Ingresá la contraseña y el nuevo tipo de cambio.</p>
-    <label>Contraseña</label>
-    <input type="password" id="modal-pass" placeholder="••••••••" />
-    <div class="modal-error" id="modal-error">Contraseña incorrecta.</div>
-    <label>Tipo de cambio ($ ARS por 1 USD)</label>
-    <input type="number" id="modal-tc" placeholder="Ej: 1250" min="1" />
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-save" onclick="saveTC()">Guardar</button>
-    </div>
-  </div>
-</div>
-
 <script>
-const PASS = "tecno2025";
+// CONFIGURACIÓN DE GOOGLE SHEETS
+const SHEET_ID = "1NzYu2WBVc0JiYDmA_SYF-s1_jHmw63lR51zNXDWu29A";
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+
 let TC = parseFloat(localStorage.getItem("tc") || "1200");
 
 const data = [
@@ -269,7 +221,7 @@ const data = [
   { cat:"Samsung", code:"SAM-031", name:"Samsung S25 FE 8/256 GB", price:560 },
   { cat:"Samsung", code:"SAM-032", name:"Samsung S25 FE 8/512 GB 🔥", price:595 },
   { cat:"Samsung", code:"SAM-033", name:"Samsung S25 FE 12/512 GB", price:615 },
-  { cat:"Samsung", code:"SAM-034", name:"Samsung S25 12/256 GB", price:680 },
+  { cat:"Samsung", code:"Samsung S25 12/256 GB", price:680 },
   { cat:"Samsung", code:"SAM-035", name:"Samsung S25 Plus 12/256 GB", price:855 },
   { cat:"Samsung", code:"SAM-036", name:"Samsung S25 Ultra 12/256 GB", price:950 },
   { cat:"Samsung", code:"SAM-037", name:"Samsung S25 Ultra 12/512 GB", price:1005 },
@@ -427,13 +379,6 @@ categories.forEach(cat => {
   chipsEl.appendChild(btn);
 });
 
-function showToast(msg, ms = 2500) {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), ms);
-}
-
 function fmtARS(usd) {
   return "$" + Math.round(usd * TC).toLocaleString("es-AR");
 }
@@ -480,41 +425,41 @@ function applyFilters() {
   });
 }
 
-function openModal() {
-  document.getElementById("modal-pass").value = "";
-  document.getElementById("modal-tc").value = TC;
-  document.getElementById("modal-error").style.display = "none";
-  document.getElementById("modalBg").classList.add("open");
-  setTimeout(() => document.getElementById("modal-pass").focus(), 80);
-}
-function closeModal() {
-  document.getElementById("modalBg").classList.remove("open");
-}
-function saveTC() {
-  const pass = document.getElementById("modal-pass").value;
-  const errEl = document.getElementById("modal-error");
-  if (pass !== PASS) {
-    errEl.style.display = "block";
-    document.getElementById("modal-pass").value = "";
-    document.getElementById("modal-pass").focus();
-    return;
+// FUNCIÓN PARA SOLICITAR EL VALOR DEL DÓLAR A GOOGLE SHEETS
+async function fetchDolarFromSheet() {
+  try {
+    const response = await fetch(SHEET_URL);
+    if (!response.ok) throw new Error("Error en la conexión con la planilla");
+    const text = await response.text();
+    
+    // Procesa el CSV recibido. Busca el valor en la fila donde dice "Dolar"
+    const lines = text.split("\n");
+    for (let line of lines) {
+      const columns = line.split(",");
+      // Limpia comillas que Google suele meter en el CSV exportado
+      const key = columns[0]?.replace(/"/g, "").trim();
+      const value = columns[1]?.replace(/"/g, "").trim();
+      
+      if (key && key.toLowerCase() === "dolar") {
+        const parsedValue = parseFloat(value);
+        if (!isNaN(parsedValue) && parsedValue > 0) {
+          TC = parsedValue;
+          localStorage.setItem("tc", TC); // Guarda en memoria local por seguridad
+          break;
+        }
+      }
+    }
+  } catch (error) {
+    console.error("No se pudo obtener el TC online, usando valor de respaldo:", error);
+  } finally {
+    // Siempre actualiza la pantalla al finalizar el intento de carga
+    updateTCDisplay();
+    applyFilters();
   }
-  const val = parseFloat(document.getElementById("modal-tc").value);
-  if (!val || val < 1) return;
-  TC = val;
-  localStorage.setItem("tc", TC);
-  updateTCDisplay();
-  applyFilters();
-  closeModal();
-  showToast("✓ Tipo de cambio actualizado: $" + Math.round(TC).toLocaleString("es-AR"));
 }
 
-document.getElementById("modal-pass").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("modal-tc").focus(); });
-document.getElementById("modal-tc").addEventListener("keydown", e => { if (e.key === "Enter") saveTC(); });
-document.getElementById("modalBg").addEventListener("click", e => { if (e.target === document.getElementById("modalBg")) closeModal(); });
-
-updateTCDisplay();
-applyFilters();
+// Inicialización de la página
+fetchDolarFromSheet();
 </script>
 </body>
 </html>
